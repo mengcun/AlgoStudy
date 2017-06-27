@@ -212,6 +212,11 @@ int modifyElement(struct Node *PtrToNode, int position, ElementType x)
     int i = 0;
     struct Node *headerNode;
     headerNode = PtrToNode;
+    if(x < 0)
+    {
+        printf("modifyElement executed but the Element X is invalid!\n");
+        return 0;
+    }
     if(position < 1)
     {
         printf("getElement executed but the position is invalid!\n");
@@ -246,6 +251,11 @@ int modifyElement(struct Node *PtrToNode, int position, ElementType x)
 struct Node *insertHeadList(struct Node *PtrToNode, ElementType insertElement)
 {
     struct Node *insertNode;
+    if(insertElement < 0)
+    {
+        printf("insertHeadList executed but the Element X is invalid!\n");
+        return 0;
+    }
     insertNode = (struct Node *)malloc(sizeof(struct Node));
     if(insertNode == NULL)
     {
@@ -268,6 +278,11 @@ int insertLastList(struct Node *PtrToNode, ElementType insertElement)
     struct Node *tempNode;//定义一个临时链表用来存放第一个节点
     headerNode = PtrToNode;
     tempNode = headerNode;
+    if(insertElement < 0)
+    {
+        printf("insertLastList executed but the Element X is invalid!\n");
+        return 0;
+    }
     insertNode = (struct Node *)malloc(sizeof(struct Node));
     if(insertNode == NULL)
     {
@@ -284,6 +299,113 @@ int insertLastList(struct Node *PtrToNode, ElementType insertElement)
     insertNode->Next = NULL;
     PtrToNode = tempNode;
     printf("insertLastList executed and success!\n");
+}
+
+/* 12.向单链表中第pos个结点位置插入元素为x的结点，若插入成功返回１，否则返回０ */
+int insertNode(struct Node *PtrToNode, int position, ElementType insertElement)
+{
+    struct Node *tempNode;
+    struct Node *insertNode;
+    int i = 0;
+    if(insertElement < 0)
+    {
+        printf("insertNode executed but the Element X is invalid!\n");
+        return 0;
+    }
+    tempNode = (struct Node *)malloc(sizeof(struct Node));
+    insertNode = (struct Node *)malloc(sizeof(struct Node));
+    if(tempNode == NULL ||insertNode ==NULL)
+    {
+       printf("内存分配失败\n");
+       exit(0);
+    }
+    memset(tempNode, 0, sizeof(struct Node));
+    memset(insertNode, 0, sizeof(struct Node));
+    insertNode->Element = insertElement;
+
+    if(position < 1)
+    {
+        printf("insertNode executed but the position is invalid!\n");
+        return 0;
+    }
+    if(PtrToNode == NULL)
+    {
+        printf("insertNode executed but the PtrToNode is invalid!\n");
+        return 0;
+    }
+    while(PtrToNode != NULL)
+    {
+        ++i;
+        if(i == position)
+        {
+            break;
+        }
+        PtrToNode = PtrToNode->Next;
+    }
+    if(i < position)
+    {
+        printf("insertNode executed but the position is too large!\n");
+        return 0;
+        }
+
+        tempNode = PtrToNode->Next;
+        PtrToNode->Next = insertNode;
+        insertNode->Next = tempNode;
+        printf("insertNode executed and success!\n");
+        return 1;
+    }
+
+    /* 13.向有序单链表中插入元素x结点，使得插入后仍然有序 H->L*/
+    struct Node *insertSortNode(struct Node *PtrToNode, ElementType insertElement)
+    {
+        struct Node *insertSortNode;
+        struct Node *tempNode;
+        struct Node *newPtrToNode;
+        struct Node *firstPtrToNode;
+        firstPtrToNode = PtrToNode;
+        if(insertElement < 0)
+        {
+            printf("insertSortNode executed but the Element X is invalid!\n");
+            return firstPtrToNode;
+    }
+    tempNode = (struct Node *)malloc(sizeof(struct Node));
+    insertSortNode = (struct Node *)malloc(sizeof(struct Node));
+    if(tempNode == NULL ||insertSortNode ==NULL)
+    {
+       printf("内存分配失败\n");
+       exit(0);
+    }
+    memset(tempNode, 0, sizeof(struct Node));
+    memset(insertSortNode, 0, sizeof(struct Node));
+    
+    if((PtrToNode->Element) <= insertElement)
+    {
+        newPtrToNode = insertHeadList(PtrToNode, insertElement);
+        printf("insertSortNode executed and use the insertHeadList!\n");
+        return newPtrToNode;
+    }
+    else
+    {
+        while(PtrToNode->Next != NULL)
+        {
+            if((PtrToNode->Element) >= insertElement)
+            {
+                tempNode = PtrToNode;
+                PtrToNode = PtrToNode->Next;    
+            }
+            else
+            {
+                tempNode->Next = insertSortNode;
+                insertSortNode->Next = PtrToNode;
+                insertSortNode->Element = insertElement;
+                printf("insertSortNode executed!\n");
+                return firstPtrToNode;
+            }
+        }
+        insertLastList(PtrToNode, insertElement);
+        printf("insertSortNode executed and use the insertLastList!\n");
+        return firstPtrToNode;
+    }
 }
 
 int main()
@@ -313,11 +435,23 @@ int main()
     modifyElement(PtrToNode, 4, 10);//将链表中位置4上的元素修改为10
     printList(PtrToNode);
 
-    newPtrToNode = insertHeadList(PtrToNode, 10);
+    newPtrToNode = insertHeadList(PtrToNode, 100);
     printList(newPtrToNode);
 
-    insertLastList(newPtrToNode, 50);
+    insertLastList(newPtrToNode, 4);
     printList(newPtrToNode);
 
+    insertNode(newPtrToNode, 6, 99);
+    printList(newPtrToNode);
+
+    newPtrToNode  = insertSortNode(newPtrToNode, 120);
+    printList(newPtrToNode);
+
+    newPtrToNode  = insertSortNode(newPtrToNode, 10);
+    printList(newPtrToNode);
+    
+    newPtrToNode  = insertSortNode(newPtrToNode, 3);
+    printList(newPtrToNode);
+    
     clearList(newPtrToNode);
 }
