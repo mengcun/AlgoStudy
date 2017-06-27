@@ -1,0 +1,15 @@
+6.Linux下无表头链表编写：
+http://www.cnblogs.com/lifuqing/archive/2011/08/20/List.html
+/* 10.向单链表的表头插入一个元素 */：这里发生错误， 因为修改链表第一个元素时候导致链表地址发生变化，使程序找不到正确的链表地址从而出错。
+int insertHeadList(Node **pNode,elemType insertElem)
+{
+    Node *pInsert;
+    pInsert = (Node *)malloc(sizeof(Node));
+    memset(pInsert,0,sizeof(Node));
+    pInsert->element = insertElem;
+    pInsert->next = *pNode;
+    *pNode = pInsert;   //这里并没有将加入的第一个元素的正确的地址返回
+    printf("insertHeadList函数执行，向表头插入元素成功\n");
+    return 1;
+}
+正确的做法是将插入元素后新生成的链表返回。
