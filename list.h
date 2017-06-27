@@ -64,6 +64,12 @@ int insertLastList(struct Node *PtrToNode, ElementType insertElement);
 int insertNode(struct Node *PtrToNode, int position, ElementType insertElement);
 /* 13.向有序单链表中插入元素x结点，使得插入后仍然有序 */
 struct Node *insertSortNode(struct Node *PtrToNode, ElementType insertElement);
+/* 14.从单链表中删除表头结点，并把该结点的值返回，若删除失败则停止程序运行 */
+struct Node *deleteHeader(struct Node *PtrToNode);
+/* 15.从单链表中删除表尾结点并返回它的值，若删除失败则停止程序运行 */
+struct Node *deleteLast(struct Node *PtrToNode);
+/* 16.从单链表中删除第pos个结点并返回它的值，若删除失败则停止程序运行 */
+struct Node *deletePosition(struct Node *PtrToNode, int position);
 #ifdef __cplusplus
 }
 #endif

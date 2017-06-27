@@ -346,31 +346,36 @@ int insertNode(struct Node *PtrToNode, int position, ElementType insertElement)
     {
         printf("insertNode executed but the position is too large!\n");
         return 0;
-        }
-
-        tempNode = PtrToNode->Next;
-        PtrToNode->Next = insertNode;
-        insertNode->Next = tempNode;
-        printf("insertNode executed and success!\n");
-        return 1;
     }
 
-    /* 13.向有序单链表中插入元素x结点，使得插入后仍然有序 H->L*/
-    struct Node *insertSortNode(struct Node *PtrToNode, ElementType insertElement)
+    tempNode = PtrToNode->Next;
+    PtrToNode->Next = insertNode;
+    insertNode->Next = tempNode;
+    printf("insertNode executed and success!\n");
+    return 1;
+}
+
+ /* 13.向有序单链表中插入元素x结点，使得插入后仍然有序 H->L*/
+struct Node *insertSortNode(struct Node *PtrToNode, ElementType insertElement)
+{
+    struct Node *insertSortNode;
+    struct Node *tempNode;
+    struct Node *newPtrToNode;
+    struct Node *firstPtrToNode;
+    firstPtrToNode = PtrToNode;
+    if(PtrToNode == NULL)
     {
-        struct Node *insertSortNode;
-        struct Node *tempNode;
-        struct Node *newPtrToNode;
-        struct Node *firstPtrToNode;
-        firstPtrToNode = PtrToNode;
-        if(insertElement < 0)
-        {
-            printf("insertSortNode executed but the Element X is invalid!\n");
-            return firstPtrToNode;
+        printf("insertSortNode executed but the PtrToNode is empty!\n");
+        return firstPtrToNode;
+    }
+    if(insertElement < 0)
+    {
+        printf("insertSortNode executed but the Element X is invalid!\n");
+        return firstPtrToNode;
     }
     tempNode = (struct Node *)malloc(sizeof(struct Node));
     insertSortNode = (struct Node *)malloc(sizeof(struct Node));
-    if(tempNode == NULL ||insertSortNode ==NULL)
+    if(tempNode == NULL ||insertSortNode == NULL)
     {
        printf("内存分配失败\n");
        exit(0);
@@ -407,6 +412,108 @@ int insertNode(struct Node *PtrToNode, int position, ElementType insertElement)
         return firstPtrToNode;
     }
 }
+
+/* 14.从单链表中删除表头结点，并把该结点的值返回，若删除失败则停止程序运行 */
+struct Node *deleteHeader(struct Node *PtrToNode)
+{
+    struct Node *newPtrToNode;
+    struct Node *tempNode;
+    if(PtrToNode == NULL)
+    {
+        printf("deleteHeader executed but the PtrToNode is empty!\n");
+        return PtrToNode;
+    }
+    tempNode = PtrToNode->Next;
+    free(PtrToNode);
+    newPtrToNode = tempNode;
+    return newPtrToNode;
+}
+
+/* 15.从单链表中删除表尾结点并返回它的值，若删除失败则停止程序运行 */
+struct Node *deleteLast(struct Node *PtrToNode)
+{
+    struct Node *newPtrToNode;
+    struct Node *tempNode;
+    newPtrToNode = PtrToNode;
+    if(PtrToNode == NULL)
+    {
+        printf("deleteLast executed but the PtrToNode is empty!\n");
+        return PtrToNode;
+    }
+    while(PtrToNode->Next != NULL)
+    {
+        tempNode = PtrToNode;
+        PtrToNode = PtrToNode->Next;
+    }
+    free(PtrToNode);
+    tempNode->Next = NULL;
+    printf("deleteLast executed and success!\n");
+    return newPtrToNode;
+}
+
+/* 16.从单链表中删除第pos个结点并返回它的值，若删除失败则停止程序运行 */
+struct Node *deletePosition(struct Node *PtrToNode, int position)
+{
+    int i = 0;
+    struct Node *frontNode;
+    struct Node *currentNode;
+    struct Node *newPtrToNode;
+    newPtrToNode = PtrToNode;
+    if(position < 1)
+    {
+        printf("deletePosition executed but the position is invalid!\n");
+        return 0;
+    }
+
+    if(PtrToNode == NULL)
+    {
+        printf("deletePosition executed but the PtrToNode is invalid!\n");
+        return 0;
+    }
+
+    if(position > 1)
+    {
+        while(PtrToNode != NULL)
+        {
+            ++i;
+            if(i == position)
+            {
+                currentNode = PtrToNode;
+                break;
+            }
+            frontNode = PtrToNode;
+            PtrToNode = PtrToNode->Next;
+        }
+        
+        if(PtrToNode == NULL)
+        {
+            newPtrToNode = deleteLast(newPtrToNode);    
+            printf("deletePosition executed and use deleteLast()!\n");
+            return newPtrToNode;
+        }
+
+        if(i < position)
+        {
+            printf("deletePosition executed but the position is too large!\n");
+            return 0;
+        }
+        frontNode->Next = currentNode->Next;
+        free(currentNode);
+        printf("deletePosition executed and success!\n");
+        
+    }
+
+    if(position == 1)
+    {
+        newPtrToNode = deleteHeader(newPtrToNode);
+        printf("deletePosition executed and use deleteHeader!\n");
+    }
+
+    return newPtrToNode;
+}
+
+/* 17.从单链表中删除值为x的第一个结点，若删除成功则返回1,否则返回0 */
+//int 
 
 int main()
 {
@@ -451,6 +558,21 @@ int main()
     printList(newPtrToNode);
     
     newPtrToNode  = insertSortNode(newPtrToNode, 3);
+    printList(newPtrToNode);
+   
+    newPtrToNode = deleteHeader(newPtrToNode);
+    printList(newPtrToNode);
+
+    newPtrToNode = deleteLast(newPtrToNode);
+    printList(newPtrToNode);
+
+    newPtrToNode = deletePosition(newPtrToNode, 2);
+    printList(newPtrToNode);
+    
+    newPtrToNode = deletePosition(newPtrToNode, 11);
+    printList(newPtrToNode);
+
+    newPtrToNode = deletePosition(newPtrToNode, 1);
     printList(newPtrToNode);
     
     clearList(newPtrToNode);
