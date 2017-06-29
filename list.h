@@ -70,6 +70,10 @@ struct Node *deleteHeader(struct Node *PtrToNode);
 struct Node *deleteLast(struct Node *PtrToNode);
 /* 16.从单链表中删除第pos个结点并返回它的值，若删除失败则停止程序运行 */
 struct Node *deletePosition(struct Node *PtrToNode, int position);
+/* 17.从单链表中删除值为x的第一个结点，若删除成功则返回1,否则返回0 */
+struct Node *deleteElement(struct Node *PtrToNode, ElementType deleteElement); 
+/* 18.交换2个元素的位置 */
+struct Node *exchangElement(struct Node *PtrToNode, ElementType x, ElementType y);
 #ifdef __cplusplus
 }
 #endif

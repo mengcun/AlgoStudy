@@ -513,8 +513,93 @@ struct Node *deletePosition(struct Node *PtrToNode, int position)
 }
 
 /* 17.从单链表中删除值为x的第一个结点，若删除成功则返回1,否则返回0 */
-//int 
+struct Node *deleteElement(struct Node *PtrToNode, ElementType deleteElement) 
+{ 
+    int position = 1;
+    struct Node *newPtrToNode;
+    newPtrToNode = PtrToNode;
+    if(PtrToNode == NULL)
+    {    
+        printf("deleteElement executed but the List is empty!\n");
+        return NULL;
+    }
+    if(deleteElement < 0)
+    {
+        printf("deleteElement executed but the Element is invalid!\n");
+        return NULL;
+    }
+    while((PtrToNode->Next != NULL) && (PtrToNode->Element != deleteElement)) //判断是否到链表末尾，以及是否存在所要找的元素
+    {
+        position = position + 1;
+        PtrToNode = PtrToNode->Next;
+    }
+    if((PtrToNode->Element != deleteElement) && (PtrToNode != NULL))
+    {
+        printf("deleteElement executed but didn't find the value!\n");
+        return NULL;
+    }
+    if(PtrToNode->Element == deleteElement)
+    {
+        printf("The address for Element %d is 0x%x, the position is %d\n", deleteElement, (unsigned int)&(PtrToNode->Element), position);
+    }
 
+    newPtrToNode = deletePosition(newPtrToNode, position);
+
+    return newPtrToNode;
+}
+/* 18.交换2个元素的位置 */
+struct Node *exchangElement(struct Node *PtrToNode, ElementType x, ElementType y)
+{
+    struct Node *newPtrToNode;
+    struct Node *tempNodeX;
+    struct Node *tempNodeY;
+    ElementType tempPositionY;
+    ElementType tempPositionX;
+    newPtrToNode = PtrToNode;
+    tempNodeX = PtrToNode;
+    tempNodeY = PtrToNode;
+    int positionX = 1;
+    int positionY = 1;
+
+    if(PtrToNode == NULL)
+    {    
+        printf("exchangElement executed but the List is empty!\n");
+        return NULL;
+    }
+    if(x < 0 || y < 0)
+    {
+        printf("exchangElement executed but the Element is invalid!\n");
+        return newPtrToNode;
+    }
+    while((tempNodeX->Next != NULL) && (tempNodeX->Element != x)) //判断是否到链表末尾，以及是否存在所要找的元素
+    {
+        positionX = positionX + 1;
+        tempNodeX = tempNodeX->Next;
+    }
+    while((tempNodeY->Next != NULL) && (tempNodeY->Element != y)) //判断是否到链表末尾，以及是否存在所要找的元素
+    {
+        positionY = positionY + 1;
+        tempNodeY = tempNodeY->Next;
+    }
+    if((tempNodeX->Element != x) && (tempNodeX != NULL))
+    {
+        printf("exchangElement executed but didn't find the value X!\n");
+        return newPtrToNode;
+    }
+    if((tempNodeY->Element != y) && (tempNodeY != NULL))
+    {
+        printf("exchangElement executed but didn't find the value Y!\n");
+        return newPtrToNode;
+    }
+    tempPositionX = tempNodeX->Element;
+    tempPositionY = tempNodeY->Element;
+    modifyElement(newPtrToNode, positionX, tempPositionY);
+    modifyElement(newPtrToNode, positionY, tempPositionX);
+    printf("exchangElement executed and success!\n");
+
+    return newPtrToNode;
+}
+/* 19.将线性表进行快速排序 H->L*/
 int main()
 {
     struct Node *PtrToNode = NULL;
@@ -574,6 +659,12 @@ int main()
 
     newPtrToNode = deletePosition(newPtrToNode, 1);
     printList(newPtrToNode);
-    
+   
+    newPtrToNode = deleteElement(newPtrToNode, 55);
+    printList(newPtrToNode);
+
+    newPtrToNode = exchangElement(newPtrToNode, 7, 4);
+    printList(newPtrToNode);
+
     clearList(newPtrToNode);
 }
